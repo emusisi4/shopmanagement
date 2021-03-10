@@ -1,0 +1,57 @@
+<template>
+  <div id="myliveapp" class="container">
+    <h2>Vue JS - how to save checkbox with multiple value in laravel 5.7</h2>
+   <p>vuejs Insert Multiple Checkbox Value in Database Using Laravel</p>
+    <form @submit.prevent="memberStore()">
+      <div class="dsp form-group">
+        <div class="form-check dsp">
+          <label for="joe" class="pakainfo form-check-label gst">
+            <input type="checkbox" 
+                    id="joe" 
+                    class="form-check-input"
+                    value="joe" 
+                    v-model="selectedMembers" />            
+            Joe
+          </label>
+        </div>
+       <div class="dsp form-check">
+          <label for="jaydeep" class="pakainfo form-check-label gst">
+            <input type="checkbox" 
+                    id="jaydeep" 
+                    class="form-check-input"
+                    value="jaydeep" 
+                    v-model="selectedMembers" />            
+            Jaydeep
+          </label>
+        </div>
+        <div class="dsp form-check">
+          <label for="Nirav" class="pakainfo form-check-label gst">
+            <input type="checkbox" 
+                    id="nirav" 
+                    class="form-check-input"
+                    value="nirav" 
+                    v-model="selectedMembers">            
+            Nirav
+          </label>
+        </div>
+        <br>
+      </div>
+      <div class="dsp form-group">
+        <button class="btn btn-primary">Submit</button>
+      </div>
+    </form>
+  </div>
+</template>
+<script>
+export default {
+  data() {
+    return {
+      selectedMembers: []
+    }
+  },
+  methods: {
+    memberStore() {
+      console.log(this.selectedMembers.toString());
+    }
+  }
+}
