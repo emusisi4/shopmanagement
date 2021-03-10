@@ -12,7 +12,7 @@ class Branch extends Authenticatable
 
 
     /**
-     * The attributes that are mass assignable.  znnznzn
+     * The attributes that are mass assignable.
      *
      * @var array
      */
