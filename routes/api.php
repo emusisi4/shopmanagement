@@ -76,11 +76,15 @@ Route::get('getminorunits', 'APIController@getminorunits');
 Route::get('getbrands', 'APIController@getbrands');
 Route::get('companiesd', 'APIController@getcompaniesd');
 Route::get('gettheorders', 'APIController@gettheorders');
+Route::get('getthesales', 'APIController@getthesales');
+
 Route::get('getsuppliers', 'APIController@getsuppliers');
 Route::get('getunits', 'APIController@getunits');
+Route::get('getunitcats', 'APIController@getunitcats');
 Route::get('getcategories', 'APIController@getcategories');
 Route::get('getproducts', 'APIController@getproducts');
 
+Route::get('getproductsactive', 'APIController@getproductsactive');
 Route::get('getWalletlist', 'APIController@getWallets');
 Route::get('getcollections', 'APIController@getWallets');
 Route::get('getformfeatures', 'APIController@getformfeatures');
@@ -291,13 +295,23 @@ Route::apiResources(['productunits' => 'API\ProductunitmeasuresController']);
 Route::apiResources(['ordermakingdetails' => 'API\OrdermakingController']);
 
 Route::apiResources(['selectedorderdetailstoview' => 'API\SelectedordertoviewController']);
+Route::apiResources(['selectedreceiptsalesdetails' => 'API\SelectedreceipttoviewController']);
 
 Route::apiResources(['itemdelivery' => 'API\ItemdeliveryController']);
 Route::apiResources(['expensetypesdata' => 'API\ExpensetypesController']);
 //Route::apiResources(['expensetypesdata' => 'API\ExpensetypesController']);
 Route::apiResources(['makesalepur' => 'API\ConfirmpositemsController']);
 Route::apiResources(['purchasessummary' => 'API\ConfirmcustomerorderfromcartController']);
+Route::apiResources(['salessummary' => 'API\SalessummaryController']);
 Route::apiResources(['saveordertoviedetails' => 'API\SaveordertoviewdetailsController']);
+
+
+
+Route::apiResources(['savesaletoviewdetails' => 'API\SavesaleviewdetailsController']);
+
+
+
+
 Route::apiResources(['userroles' => 'API\UserrolesController']);
 Route::apiResources(['insertintoorders' => 'API\InserintoordersController']);
 
@@ -345,5 +359,8 @@ Route::get('getuserbalance', 'APIController@getuserbalance');
 Route::get('getordertotal', 'APIController@Ordertotal');
 Route::post('checks', 'CheckController@store');
 Route::get('getselectedordertotal', 'APIController@getselectedordertotal');
+
+Route::get('getselectedreceipttotals', 'APIController@getselectedreceipttotals');
+
 //GetShopbalancingrecords
 /// End of balancing Records

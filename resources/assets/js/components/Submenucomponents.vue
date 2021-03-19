@@ -89,9 +89,9 @@
             <div class="modal-body">
             <div class="form-group">
                     <label for="exampleInputEmail1">Sub-Menu Name</label>
-                     <input v-model="form.name" type="text" name="name"
-                      class="form-control form-control-sm" :class="{ 'is-invalid': form.errors.has('name') }">
-                    <has-error :form="form" field="name"></has-error>
+                     <input v-model="form.submenuname" type="text" name="submenuname"
+                      class="form-control form-control-sm" :class="{ 'is-invalid': form.errors.has('submenuname') }">
+                    <has-error :form="form" field="submenuname"></has-error>
       
                   </div>
                 
@@ -189,7 +189,7 @@
                                      shid:'',
                                    name  : '',
                                     description : '',
-                              
+                              submenuname:'',
                                     mainheadercategory :'',
                                     linkrouterre : '',
                                     dorder : ''

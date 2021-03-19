@@ -38,6 +38,12 @@ use App\Company;
 use App\Orderssummary;
 use App\Orderdetail;
 use App\Ordertoview;
+use App\Unitcategory;
+use App\Salessummary;
+use App\Saleview;
+use App\Productsale;
+
+
 class APIController extends Controller
 {
     /**
@@ -219,6 +225,20 @@ $data = Company::latest('id')
   
 }
 
+public function getthesales()
+{
+    $userid =  auth('api')->user()->id;
+    $userbranch =  auth('api')->user()->branch;
+    $userrole =  auth('api')->user()->type;
+  //  if($userrole == 101)
+    {
+$data = Salessummary::latest('id')
+//->where('branchno', $userbranch)
+->get();
+    return response()->json($data);
+    }
+  
+}
 public function gettheorders()
 {
     $userid =  auth('api')->user()->id;
@@ -248,6 +268,21 @@ $data = Brand::latest('id')
     }
   
 }
+
+public function getproductsactive()
+{
+    $userid =  auth('api')->user()->id;
+    $userbranch =  auth('api')->user()->branch;
+    $userrole =  auth('api')->user()->type;
+  //  if($userrole == 101)
+    {
+$data = Product::latest('id')
+//->where('branchno', $userbranch)
+->get();
+    return response()->json($data);
+    }
+  
+}
 public function getproducts()
 {
     $userid =  auth('api')->user()->id;
@@ -262,6 +297,27 @@ $data = Product::latest('id')
     }
   
 }
+
+
+
+
+
+public function getunitcats()
+{
+    $userid =  auth('api')->user()->id;
+    $userbranch =  auth('api')->user()->branch;
+    $userrole =  auth('api')->user()->type;
+  //  if($userrole == 101)
+    {
+$data = Unitcategory::latest('id')
+//->where('branchno', $userbranch)
+->get();
+    return response()->json($data);
+    }
+  
+}
+
+
 public function getsuppliers()
 {
     $userid =  auth('api')->user()->id;
@@ -949,6 +1005,45 @@ public function Currencysymbol()
 }
 
 }
+
+
+
+
+
+public function getselectedreceipttotals()
+{
+   
+
+ /// Getting the Logged in User details
+ $userid =  auth('api')->user()->id;
+ $userbranch =  auth('api')->user()->branch;
+ $userrole =  auth('api')->user()->type;
+
+{
+  $ordertovire  = Saleview::latest('id')->where('ucret', $userid)->orderBy('id', 'Desc')->limit(1)->value('ordertoview'); 
+  
+    $currentdate = date('Y-m-d');
+   $totalcattotal = \DB::table('productsales')
+   ->where('invoiceno', $ordertovire)
+    //->where('ucret', '=', $userid)
+  //  ->where('transferdate', '=', $currentdate)
+   // ->where('status', '=', 0)
+    //->orderByDesc('id')
+    //->limit(1)
+    ->sum('linetotal');
+    return $totalcattotal;
+}
+
+}
+
+
+
+
+
+
+
+
+
 
 
 

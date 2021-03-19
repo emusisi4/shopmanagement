@@ -419,8 +419,8 @@ button.add-newm {
                     
                        <td>
                      
-                     <button type="button"  v-if="infoeditproductbrand > 0"   class="btn  bg-gradient-secondary btn-xs fas fa-edit"   @click="editModalBrand(mydataObjectbrand)">   </button>
-                      <button type="button"  v-if="infodeleteproductbrand > 0" class="btn  bg-gradient-danger btn-xs fas fa-trash-alt"  @click="deleteBrand(mydataObjectbrand.id)">  </button>
+                    
+                     <button type="button"  v-if="infodeleteproductbrand > 0" class="btn  bg-gradient-danger btn-xs fas fa-trash-alt"  @click="deleteBrand(mydataObjectbrand.id)">  </button>
                  <button type="button" v-if="infoviewrecordproductbrand > 0"   class="btn  bg-gradient-info btn-xs fas fa-eye"   @click="editModalBrand(mydataObjectbrand)">   </button>
 
 
@@ -709,12 +709,15 @@ button.add-newm {
                    
                        <!-- <td v-if="infoedit > 0"> -->
                   <td>
-                    
-                      <button type="button" v-if="infoviewrecordproductbrand < 1"   class="btn  bg-gradient-info btn-xs fas fa-tick"   @click="itemconfirmdelivery(mydataObjectinfo)">   Confirm Delivery </button>
+                   <div v-if="mydataObjectinfo.orderdeliverystatus == 0" >
+                      <button type="button" v-if="infoviewrecordproductbrand < 1"   class="btn  bg-gradient-info btn-xs fas fa-tick"   @click="itemconfirmdelivery(mydataObjectinfo)">   Confirm </button>
     
                 
                     <button type="button" class="btn  bg-gradient-danger btn-xs fas fa-trash-alt"  @click="removeitemfromOrder(mydataObjectinfo.id)">  </button>
-                 
+                 </div>
+                  <div v-if="mydataObjectinfo.orderdeliverystatus == 1" >
+                     Confirmed
+                     </div>
                       </td>
                     
                     </tr>
@@ -835,7 +838,9 @@ button.add-newm {
                              </div>
                     </div>
 
-   <div class="col-sm-3">
+                
+                
+                <div class="col-sm-3">
                          
                  <div class="form-group">
                   <label>Supplier </label>
@@ -852,12 +857,12 @@ button.add-newm {
 
                     </div>
 
-   <div class="col-sm-3">
-                        <div class="form-group">
-                  <label>Main Unit</label>
-                    <select name ="unitofmeasure"  disabled v-model="form.unitofmeasure" id ="unitofmeasure" class="form-control" :class="{'is-invalid': form.errors.has('unitofmeasure')}">
-                    <option value=" ">  </option>
-                    <option v-for='data in unitslistmain' v-bind:value='data.id'> {{ data.unitname }} </option>
+                         <div class="col-sm-3">
+                         <div class="form-group">
+                         <label>Main Unit</label>
+                         <select name ="unitofmeasure"  disabled v-model="form.unitofmeasure" id ="unitofmeasure" class="form-control" :class="{'is-invalid': form.errors.has('unitofmeasure')}">
+                         <option value=" ">  </option>
+                         <option v-for='data in unitslistmain' v-bind:value='data.id'> {{ data.unitname }} </option>
 
                     </select>
                       <has-error :form="form" field="unitofmeasure"></has-error>
@@ -891,6 +896,20 @@ button.add-newm {
                                 </div>
                         
                     </div>
+
+
+
+                      <input v-model="form.id" hidden readonly  type="id" name="recordto">
+                      <input v-model="form.datemade" hidden readonly type="text" name="datemade">
+
+                      <input v-model="form.invoiceno" hidden readonly type="text" name="invoiceno">
+
+
+
+
+
+
+
                      <div class="col-sm-3">
                           <div class="form-group">
                
@@ -1036,7 +1055,7 @@ button.add-newm {
                                 </div>
                     </div>
                    
-                   
+                 
                    
                    <div class ="bethapa-table-header"></div>
 
@@ -1106,7 +1125,7 @@ button.add-newm {
   <button v-show="!editmode" type="submit" class="btn btn-primary btn-sm">Submit Data</button>
 
 
-            <button v-show="editmode" type="submit" class="btn btn-success btn-sm">Confirm Delivery</button>
+            <button v-show="editmode" type="submit" class="btn btn-success btn-sm">Confirm</button>
 
 
 
@@ -1452,6 +1471,8 @@ button.add-newm {
                                         companycontact:'',
                                         companycontactperson:'',
 lineunitcost:'',
+invoiceno:'',
+invoicedate:'',
                                         customername:'',
                                         contact:'',
                                         residence:'',
@@ -1890,7 +1911,7 @@ choosetoview(){
    
  axios.get("api/checkifarecordexistastovieworderdetails").then(({ data }) => (this.existsordertoview = data));
  axios.get("api/selectedorderdetailstoview").then(({ data }) => (this.theselectedorderdetails = data));
-  axios.get("api/getselectedordertotal").then(({ data }) => (this. selectedordertotalzz = data));
+ axios.get("api/getselectedordertotal").then(({ data }) => (this. selectedordertotalzz = data));
   
   
   
@@ -2262,22 +2283,23 @@ Toast.fire({
               createNewconfirmdelivery(){
 
   this.$Progress.start();
-this.form.post('api/productbrands')
+this.form.post('api/itemdelivery')
 .then(()=>{
 
 
 Fire.$emit('AfterAction');
 
-$('#addNewbrand').modal('show');
+$('#confirmOrderdelivery').modal('hide');
 
 Toast.fire({
   icon: 'success',
   title: 'Record Added Successfully'
 });
-
+axios.get("api/selectedorderdetailstoview").then(({ data }) => (this.theselectedorderdetails = data));
   this.$Progress.finish();
     this.form.reset();
 })
+
 .catch(()=>{
 
 })
@@ -2348,31 +2370,7 @@ Toast.fire({
 /////////////////////////////////
  
 
- createNewconfirmdelivery(){
-    this.$Progress.start();
-            /// viewing from the sonsole
-            ///console.log('Edidint data');
-/// calling the function to update the data
-this.form.put('api/itemdelivery/'+this.form.id)
-  .then(()=> {
-    // on success
-   $('#addNewbrand').modal('hide');
-    swal.fire(
-        'Update!',
-        'Your file has been updated.',
-        'success'
-      )
-      this.$Progress.finish();
-    Fire.$emit('AfterAction');
 
-  })
-
-
-  .catch(()=>{
- this.$Progress.fail();
-  });
-
-            },
 
              
 /////////////////////////////////////////////////

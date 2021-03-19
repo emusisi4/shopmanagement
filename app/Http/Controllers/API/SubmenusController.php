@@ -81,7 +81,7 @@ class SubmenusController extends Controller
 
 
        $this->validate($request,[
-        'name'   => 'required | String |max:191'
+        'submenuname'   => 'required | String |max:191'
        // 'iconclass'   => 'required',
        // 'dorder'   => 'sometimes |min:0'
      ]);

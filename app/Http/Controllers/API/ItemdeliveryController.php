@@ -13,6 +13,7 @@ use App\Product;
 use App\Shopingcat;
 use App\Productsale;
 use App\Productdelivery;
+use App\Productprice;
 
 class ItemdeliveryController extends Controller
 {
@@ -63,57 +64,95 @@ class ItemdeliveryController extends Controller
        $this->validate($request,[
        'productname'   => 'required',
        'brand'   => 'required',
+       'sellingprice'   => 'required',
+       'deliveringsupplier'   => 'required',
+       'deliveringunitofmeasure' => 'required',
+       'deliveringquantity' => 'required',
+       'deliveringqtyperunit' => 'required',
+       'deliveringsmallunitmeasure' => 'required',
+       'invoiceno' => 'required',
        // 'dorder'   => 'sometimes |min:0'
      ]);
-     $userid =  auth('api')->user()->id;
-     $branch =  auth('api')->user()->branch;
-  $datepaid = date('Y-m-d');
+     $userid =   auth('api')->user()->id;
+     $branch =   auth('api')->user()->branch;
+     $datepaid = date('Y-m-d');
 
   
 /// getting the Unit Price
-$product = $request['productcode'];
-$unitprice = \DB::table('productstocks') ->where('productcode', '=', $product)->value('unitprice');
+$invoiceno = $request['invoiceno'];
+
+$product = $request['productname'];
+$recordto = $request['id'];
+
+
+//$unitprice = \DB::table('productstocks') ->where('productcode', '=', $product)->value('unitprice');
 
 /// checking if the product is on the cart
-$productexistsoncart = \DB::table('shopingcats')->where('productcode', '=', $product)->where('ucret', '=', $userid)->count();
-if($productexistsoncart < 1)
+//$productexistsoncart = \DB::table('shopingcats')->where('productcode', '=', $product)->where('ucret', '=', $userid)->count();
+//if($productexistsoncart < 1)
 {
-        Shopingcat::Create([
+  Productdelivery::Create([
     
-  //    'productcode' => $request['productcode'],
+  
       'productname' => $request['productname'],
-      'brand' => $request['brand'],
-      'supplier' => $request['supplier'],
-      'unitmeasure' => $request['unitmeasure'],
-      'quantity' => $request['quantity'],
-      'unitcost' => $request['unitcost'],
-      'smallunitmeasure' => $request['smallunitmeasure'],
+      'orderdate' => $request['datemade'],
      
-     // 'datesold' => $datepaid,
-      //'branch' => $branch,
-      'unitprice' => $unitprice,
-      'linetotal' => ($unitprice*( $request['quantity'])),
+      'qtyordered' => $request['quantity'],
+      'ordersupplier' => $request['supplier'],
+      'orderingmainunit' => $request['unitofmeasure'],
+      'orderingsmallunit' => $request['smallunitmeasure'],
+      'orderingqtyperunit' => $request['qtyperunit'],
+      'orderingbrand' => $request['brand'],
+      'costpriceforunit' => $request['unitcost'],
+      'linecostprice' => $request['lineunitcost'],
+      'deliveringmainunit' => $request['deliveringunitofmeasure'],
+      'qtyofunitsdelivered' => $request['deliveringquantity'],
+     
+
+      'qtyperunitdelivered' => $request['deliveringqtyperunit'],
+      'smallunitdelivered' => $request['deliveringsmallunitmeasure'],
+      'sellingprice' => $request['sellingprice'],
+
+      'deliveringsupplier' => $request['deliveringsupplier'],
+      //'linetotal' => ($unitprice*( $request['quantity'])),
      
       'ucret' => $userid,
     
   ]);
+
+
+  Productprice::Create([
+    
+  
+    'productcode' => $request['productname'],
+    //'orderdate' => $request['datemade'],
+   
+    'unitcost' => $request['lineunitcost'],
+    'unitprice' => $request['sellingprice'],
+    
+    'lineprofit' => ($request['sellingprice']-( $request['lineunitcost'])),
+   'profitperc' => 100*($request['lineunitcost']/( $request['sellingprice'])),
+    'ucret' => $userid,
+  
+]);
         }
 
-        if($productexistsoncart > 0)
-{
-  $currentquantity = \DB::table('shopingcats') ->where('productcode', '=', $product)->where('ucret', '=', $userid)->value('quantity');
+//         if($productexistsoncart > 0)
+// {
+  // $currentquantity = \DB::table('shopingcats') ->where('productcode', '=', $product)->where('ucret', '=', $userid)->value('quantity');
+ // $particularitemdetails = \DB::table('shopingcats') ->where('productcode', '=', $product)->where('ucret', '=', $userid)->value('quantity');
  
-$newquantity = $request['quantity']+$currentquantity;
+ //$newquantity = $request['quantity']+$currentquantity;
   
-$result = DB::table('shopingcats')
-    ->where('productcode', $product)
-    ->update([
-      'quantity' => $newquantity,
-      'linetotal' => (($newquantity*$unitprice))
-    ]);
+ $result = DB::table('orderdetails')
+     ->where('id', $recordto)
+     ->update([
+       'orderdeliverystatus' => 1
+       //'linetotal' => (($newquantity*$unitprice))
+     ]);
   
      
-        }
+//         }
   //$datas =\DB::table('shopingcats')->get();
 
 //  //foreach($datas as $data){

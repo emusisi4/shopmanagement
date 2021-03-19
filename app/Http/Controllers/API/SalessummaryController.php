@@ -14,9 +14,9 @@ use App\Branchpayout;
 use App\Shopingcat;
 use App\Productsale;
 use App\Orderdetail;
-use App\Orderssummary;
+use App\Salessummary;
 
-class ConfirmcustomerorderfromcartController extends Controller
+class SalessummaryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -48,7 +48,7 @@ $userrole =  auth('api')->user()->type;
      //    ->get();
 
     //  return   Branchpayout::with(['ExpenseTypeconnect','expenseCategory','payingUserdetails'])->latest('id')
-       return   Orderssummary::latest('id')
+       return   Salessummary::latest('id')
        // ->where('del', 0)
        ->paginate(13);
 
@@ -300,10 +300,16 @@ $user->update($request->all());
        // $user = Shopingcat::findOrFail($id);
       //  $user->delete();
        // return['message' => 'user deleted'];
+
        $userid =  auth('api')->user()->id;
 $userbranch =  auth('api')->user()->branch;
-$userrole =  auth('api')->user()->type;
-       DB::delete('delete from ordermakings where ucret = ?',[$userid]);
+$userrole =  auth('api')->user()->type; 
+/// getting the receiptno
+$receiptno = \DB::table('salessummaries') ->where('id', '=', $id)->value('invoiceno');
+       DB::delete('delete from salessummaries where id = ?',[$id]);
+// DEleting the sales records
+
+       DB::delete('delete from productsales where invoiceno = ?',[$receiptno]);
 
     }
 }

@@ -82,7 +82,7 @@ class CompanyproductsController extends Controller
 //  $inpbranch = $request['branchnametobalance'];
 
 $dateinq =  $request['datedone'];
-
+$productcode  = \DB::table('products')->orderBy('id', 'Desc')->limit(1)->value('id');
 
        return Product::Create([
     

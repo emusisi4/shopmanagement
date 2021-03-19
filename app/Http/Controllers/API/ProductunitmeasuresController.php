@@ -66,6 +66,7 @@ class ProductunitmeasuresController extends Controller
 
        $this->validate($request,[
      'unitname'   => 'required  |max:191',
+     'rop'   => 'required  |max:191',
      'shotcode'   => 'required  |max:5'
        // 'iconclass'   => 'required',
        // 'dorder'   => 'sometimes |min:0'
@@ -82,7 +83,7 @@ $dateinq =  $request['datedone'];
     
 
       'unitname' => $request['unitname'],
-     
+      'rop' => $request['rop'],
       'shotcode' => $request['shotcode'],
      
       'ucret' => $userid,

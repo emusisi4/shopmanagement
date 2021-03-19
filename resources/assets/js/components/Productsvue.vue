@@ -67,7 +67,7 @@ button.add-newm {
                   <div class="tab-pane fade active show" id="custom-tabs-three-home" role="tabpanel" aria-labelledby="custom-tabs-three-home-tab">
          
                      <div class="bethapa-table-header">
-                     Company Product Details <button v-if="info > 0" type="button" class="add-newm" @click="newModal" >Add New Product </button>
+                     Product Details <button v-if="info > 0" type="button" class="add-newm" @click="newModal" >Add New Product </button>
                      </div>
          
             
@@ -76,7 +76,7 @@ button.add-newm {
                     <tr>
                       <th>#</th>
                         <th>NAME</th>
-                       <th>CODE</th>
+                       
                       
                       <th>BRAND</th>
                      
@@ -97,7 +97,7 @@ button.add-newm {
                  
                  
                      <td> {{ (mydataObjectinfo.name)}}</td>
-                     <td>{{mydataObjectinfo.productcode}}</td>
+                     
                     
                      <td> <template v-if="mydataObjectinfo.brand_name">	{{mydataObjectinfo.brand_name.brandname}}</template></td>
                     
@@ -180,7 +180,9 @@ button.add-newm {
                     <tr>
                       <th>#</th>
                         <th>UNIT NAME</th>
-                       <th>DESCRIPTION</th>
+                      
+                         <th>SHORT CODE</th>
+                           <th>UNIT TYPE</th>
                        <th></th>
                     </tr>
                   </thead>
@@ -194,6 +196,21 @@ button.add-newm {
                   
                     
                    <td> {{ (mydataObjectunit.shotcode)}}</td>
+
+                    <td> 
+                    <div v-if="mydataObjectunit.rop == 1 " >
+                      <span class="cell" style="color:maroon ;">  
+   
+                    <span style="font-size:1.2em;" center > Main Unit </span></span>
+                    </div>
+
+                      <div v-if="mydataObjectunit.rop == 2 " >
+                      <span class="cell" style="color:blue ;">  
+   
+                    <span style="font-size:1.2em;" center > Small Unit </span></span>
+                    </div>
+                    
+                    </td>
                   
                   
                                          
@@ -311,6 +328,22 @@ button.add-newm {
                        <has-error :form="form" field="unitname"></has-error>
                                 </div>
 
+
+<div class="form-group">
+                   <label>Unit Type </label>
+                    <select name ="rop" v-model="form.rop"  id ="rop"  class="form-control" :class="{'is-invalid': form.errors.has('rop')}">
+                    <option value=" ">  </option>
+                    <option v-for='data in unitcats' v-bind:value='data.id'> {{data.id}}-{{ data.unitcategoryname }}</option>
+
+                    </select>
+      <has-error :form="form" field="rop"></has-error>
+      
+                  </div>
+
+
+
+
+
         <div class="form-group">
                     <label for="exampleInputEmail1">Short Code</label>
                      <textarea v-model="form.shotcode" type="text" name="shotcode"
@@ -318,6 +351,27 @@ button.add-newm {
       <has-error :form="form" field="shotcode"></has-error>
       
                   </div>
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   
             </div>
             <div class="modal-footer">
@@ -683,7 +737,7 @@ button.add-newm {
                                                catname : '',
                                                  brandname : '',
                                               unitmeasure : '',
-                                             
+                                             rop:'',
                                              
                                            
                                               
@@ -1126,7 +1180,8 @@ $('#addNewproductcategory').modal('show');
                     axios.get("api/getviewproductunitmeasure").then(({ data }) => (this.infoviewrecordunitmeasure= data));
                     axios.get("api/geteditproductunitmeasure").then(({ data }) => (this.infoeditunitmeasure= data));
                     axios.get("api/getdeleteproductunitmeasure").then(({ data }) => (this.infodeleteunitmeasure = data));
-
+                   
+                    axios.get("api/getunitcats").then(({ data }) => (this.unitcats = data));
                 
                      axios.get("api/productunits").then(({ data }) => (this.mydataObjectProductunitsofmeasurekk = data));
 
