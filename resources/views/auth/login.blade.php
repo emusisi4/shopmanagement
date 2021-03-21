@@ -7,7 +7,7 @@
         <div class="col-md-8">
            
         <div class="card">
-                <div class="card-header"><img src="images/logo.png" alt="innobet-logo"></div>
+                <div class="card-header"><img src="images/logobh.png" alt="NCATE ENTERPRISES LTD"></div>
                 
                 <div class="card-body">
                     <form method="POST" action="{{ route('login') }}" aria-label="{{ __('Login') }}">
