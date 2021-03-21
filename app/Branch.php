@@ -25,7 +25,7 @@ class Branch extends Authenticatable
  //   }
 
  public function students(){
-  // creating a relationship between the students model 
+  // creating a relationship between the students model hhhdhhhhhd
   return $this->hasMany(Branchpayout::class, 'branchno', 'branch'); 
 }
 
